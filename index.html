@@ -19,10 +19,24 @@
   </style>
 </head>
 <body>
+  <!-- Kotel live stream in iframe -->
   <iframe 
     src="https://thekotel.org/en/western-wall/western-wall-cameras/" 
     allow="autoplay; fullscreen"
     allowfullscreen>
   </iframe>
+
+  <!-- Hidden heartbeat element to simulate page activity -->
+  <span id="heartbeat" style="display:none;"></span>
+
+  <script>
+    // Update the hidden element every 10 seconds to keep Silk "awake"
+    setInterval(() => {
+      const span = document.getElementById("heartbeat");
+      if (span) {
+        span.innerText = Date.now(); // Update to current time
+      }
+    }, 10000);
+  </script>
 </body>
 </html>
