@@ -3,7 +3,6 @@
 <head>
   <title>Kotel Live Stream</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <style>
     html, body {
       margin: 0;
@@ -12,47 +11,25 @@
       background: black;
       overflow: hidden;
     }
-    video {
+    iframe {
+      border: none;
       width: 100vw;
       height: 100vh;
-      object-fit: contain;
-      background: black;
     }
   </style>
 </head>
 <body>
-  <video id="video" autoplay muted playsinline controls></video>
+  <iframe
+    src="https://thekotel.org/en/connect-remotely-to-the-western-wall/#live"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
+
+  <span id="heartbeat" style="display:none;"></span>
 
   <script>
-    const video = document.getElementById('video');
-
-    const streamUrl = 'https://cdn1.cast-tv.com/23595/Live_Kotel2_ABR/23595/Live_Kotel2_11SP/chunks.m3u8';
-
-    function startStream() {
-      if (Hls.isSupported()) {
-        const hls = new Hls({
-          liveSyncDurationCount: 3,
-          liveMaxLatencyDurationCount: 6
-        });
-        hls.loadSource(streamUrl);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
-          video.play();
-        });
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = streamUrl;
-        video.addEventListener('loadedmetadata', function () {
-          video.play();
-        });
-      }
-    }
-
-    startStream();
-
     setInterval(() => {
-      if (video.paused) {
-        video.play();
-      }
+      document.getElementById("heartbeat").innerText = Date.now();
     }, 10000);
   </script>
 </body>
