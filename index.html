@@ -25,21 +25,29 @@
 
   <script>
     const video = document.getElementById('video');
-    const streamUrl = 'https://cdn1.cast-tv.com/23595/Live_Kotel2_ABR/23595/Live_Kotel2_11SP/chunks.m3u8?nimblesessionid=18824516';
 
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(streamUrl);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, function () {
-        video.play();
-      });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = streamUrl;
-      video.addEventListener('loadedmetadata', function () {
-        video.play();
-      });
+    const streamUrl = 'https://cdn1.cast-tv.com/23595/Live_Kotel2_ABR/23595/Live_Kotel2_11SP/chunks.m3u8';
+
+    function startStream() {
+      if (Hls.isSupported()) {
+        const hls = new Hls({
+          liveSyncDurationCount: 3,
+          liveMaxLatencyDurationCount: 6
+        });
+        hls.loadSource(streamUrl);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+          video.play();
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = streamUrl;
+        video.addEventListener('loadedmetadata', function () {
+          video.play();
+        });
+      }
     }
+
+    startStream();
 
     setInterval(() => {
       if (video.paused) {
