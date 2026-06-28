@@ -3,34 +3,58 @@
 <head>
   <title>Kotel Live Stream</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
+      width: 100%;
       background: black;
       overflow: hidden;
     }
+
     iframe {
       border: none;
       width: 100vw;
       height: 100vh;
+      background: black;
+    }
+
+    #heartbeat {
+      position: fixed;
+      bottom: -100px;
+      left: -100px;
+      opacity: 0;
+      font-size: 1px;
     }
   </style>
 </head>
+
 <body>
   <iframe
+    id="kotelFrame"
     src="https://thekotel.org/en/connect-remotely-to-the-western-wall/#live"
     allow="autoplay; fullscreen"
     allowfullscreen>
   </iframe>
 
-  <span id="heartbeat" style="display:none;"></span>
+  <div id="heartbeat">0</div>
 
   <script>
+    const heartbeat = document.getElementById("heartbeat");
+    const iframe = document.getElementById("kotelFrame");
+
+    // Keeps the parent page "active"
     setInterval(() => {
-      document.getElementById("heartbeat").innerText = Date.now();
+      heartbeat.innerText = Date.now();
     }, 10000);
+
+    // Soft iframe refresh every 6 hours, not full page reload
+    // This may help if the embedded Kotel page freezes.
+    setInterval(() => {
+      iframe.src = iframe.src;
+    }, 21600000);
   </script>
 </body>
 </html>
